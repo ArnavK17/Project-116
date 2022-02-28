@@ -1,20 +1,34 @@
-var images = ["https://i.postimg.cc/MGn9GJXw/family.jpg","https://i.postimg.cc/qqyYvVbq/grandpa.jpg", "https://i.postimg.cc/wjMnFtMX/father.jpg" , "https://i.postimg.cc/5ymDKL83/bro.jpg", "https://i.postimg.cc/JnL6wtrd/sister.jpg", "https://i.postimg.cc/bw5W5zSK/mother.jpg"];
-var names = ["Fmaily Book","Ranbir Singh", "Diljeet Singh", "Rocky Singh", "Alia Singh", "Soni Singh"];
-var i = 0;
-function update()
-{
-    i++;
-    var numbers_of_family_member_in_array = 5
-    if(i > numbers_of_family_member_in_array)
-      {
-          i = 0;
-      }
-    
-    //Debug the code to store list of images in updatedImage. Use images[i]
-    var  updatedImage = images[i] ;
-    //Debug the code to store list of names in updatedName. Use names[i]
-    var updatedName = names[i] ;
- 
-    document.getElementById("family_member_image").src = updatedImage;
-    document.getElementById("family_member_name").innerHTML = updatedName;
+noseX = 0;
+noseY = 0;
+var mustache
+function preLoad(){
+mustache=loadImage('https://i.postimg.cc/q7cyNFDw/mostachue.png')
+}
+function setup(){
+    canvas= createCanvas(300,300);
+    canvas.center()
+    video= createCapture(VIDEO);
+    video.size(300,300);
+    video.hide();
+    poseNet= ml5.poseNet(video, modelLoaded);
+    poseNet.on("pose",gotPoses);
+}
+function modelLoaded(){
+    console.log("pose Net is initialized");
+}
+function gotPoses(results){
+    if(results.length>0){
+        console.log(results);
+        console.log("nose x = "+results[0].pose.nose.x);
+        console.log("nose y = "+results[0].pose.nose.y);
+        noseX= results[0].pose.nose.x-30;
+    noseY= results[0].pose.nose.y;
+    }
+}
+function draw(){
+    image(video,0,0,300,300);
+    image(mustache,noseX,noseY,80,35);
+}
+function takeSnapshot(){
+    save("student.png")
 }
